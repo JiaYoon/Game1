@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/hand_animation"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        bind:layout_constraintLeft_toLeftOf="parent"
+        bind:layout_constraintRight_toRightOf="parent"
+        bind:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/arm"
-        android:layout_width="36dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scaleType="fitXY" />
+        bind:layout_constraintLeft_toLeftOf="parent"
+        bind:layout_constraintRight_toRightOf="parent"
+        bind:layout_constraintTop_toBottomOf="@+id/hand_animation"
+        tools:src="@drawable/arm1" />
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

@@ -130,7 +130,7 @@ public class GameActivity extends AppCompatActivity {
                 }
 
                 ImageView img = findViewById(R.id.img_save);
-                img.setImageResource(R.drawable.btn_save2);
+                img.setImageResource(R.drawable.loading_img);
                 Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.ratate_btn);
                 img.setAnimation(animation);
                 (new saveImage()).execute(false);
@@ -296,7 +296,7 @@ public class GameActivity extends AppCompatActivity {
 
     public void finishSaveAction() {
         ImageView btn = findViewById(R.id.img_save);
-        btn.setImageResource(R.drawable.btn_save3);
+        btn.setImageResource(R.drawable.saved_img);
         btn.clearAnimation();
         findViewById(R.id.btn_save_fill).setVisibility(View.VISIBLE);
     }
