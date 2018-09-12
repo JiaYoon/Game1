@@ -1,10 +1,12 @@
 package com.example.ga.rps.view;
 
-import android.content.Context;
+import android.app.Activity;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import com.example.ga.rps.util.ScreenUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,8 +23,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private List<Camera.Size> mSupportedPreviewSizes;
     private Camera.Size mPreviewSize;
 
-    public CameraPreview(Context context, Camera camera) {
+    public CameraPreview(Activity context, Camera camera) {
         super(context);
+
         mCamera = camera;
 
         mHolder = getHolder();
@@ -37,7 +40,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         final int height = resolveSize(getSuggestedMinimumHeight(), heightMeasureSpec);
 
         if (mSupportedPreviewSizes != null) {
-            mPreviewSize = getOptimalPreviewSize(mSupportedPreviewSizes, height, width);
+            mPreviewSize = getOptimalPreviewSize(mSupportedPreviewSizes, height, ScreenUtils.getScreenSize().widthPixels);
         }
 
         if (mPreviewSize != null) {
@@ -48,8 +51,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 ratio = (float) mPreviewSize.width / (float) mPreviewSize.height;
 
             // One of these methods should be used, second method squishes preview slightly
-            setMeasuredDimension(width, (int) (width * ratio));
-            //        setMeasuredDimension((int) (width * ratio), height);
+            setMeasuredDimension((int) (height / ratio), height);
         }
     }
 
@@ -118,7 +120,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         Camera.Parameters parameters = mCamera.getParameters();
         parameters.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
         parameters.setPictureSize(mPreviewSize.width, mPreviewSize.height);
-        parameters.setRotation(270);
         mCamera.setParameters(parameters);
         mCamera.setDisplayOrientation(90);
 

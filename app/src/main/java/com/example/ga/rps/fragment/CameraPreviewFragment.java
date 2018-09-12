@@ -1,9 +1,13 @@
 package com.example.ga.rps.fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,9 +21,8 @@ import com.example.ga.rps.GameActivity;
 import com.example.ga.rps.R;
 import com.example.ga.rps.view.CameraPreview;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -59,19 +62,32 @@ public class CameraPreviewFragment extends Fragment {
                 if (camera == null) return;
                 camera.takePicture(null, null, new Camera.PictureCallback() {
                     public void onPictureTaken(byte[] data, Camera camera) {
-                        File pictureFile = getOutputMediaFile();
-                        if (pictureFile == null) {
-                            return;
-                        }
-                        try {
-                            FileOutputStream fos = new FileOutputStream(pictureFile);
-                            fos.write(data);
-                            fos.close();
-                        } catch (IOException ignored) {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+                        if (bitmap.getWidth() < bitmap.getHeight()) {
+                            Matrix matrix = new Matrix();
+                            matrix.postRotate(90);
+                            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
                         }
 
+                        int imageWidth = bitmap.getWidth();
+                        int imageHeight = cameraContainer.getMeasuredWidth() * camera.getParameters().getPictureSize().width / cameraContainer.getMeasuredHeight();
+                        bitmap = Bitmap.createBitmap(bitmap
+                                , 0 //X 시작위치 (원본의 4/1지점)
+                                , (bitmap.getHeight() - imageHeight) //Y 시작위치 (원본의 4/1지점)
+                                , imageWidth// 넓이 (원본의 절반 크기)
+                                , imageHeight); // 높이 (원본의 절반 크기)
+
+
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream); // bmp is your Bitmap instance
+                        String path = MediaStore.Images.Media.insertImage(getContext().getContentResolver(), bitmap, "MyCameraApp/IMG_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date()) + ".jpg", null);
+
+
+                        bitmap.recycle();
+
                         Intent intent = new Intent(getActivity(), GameActivity.class);
-                        intent.putExtra("path", pictureFile.getAbsolutePath());
+                        intent.putExtra("uri", path);
                         startActivity(intent);
                     }
                 });
@@ -142,7 +158,7 @@ public class CameraPreviewFragment extends Fragment {
 
     public void setCamera() {
         camera = getCameraInstance();
-        cameraPreview = new CameraPreview(getContext(), camera);
+        cameraPreview = new CameraPreview(getActivity(), camera);
         cameraContainer.addView(cameraPreview);
     }
 

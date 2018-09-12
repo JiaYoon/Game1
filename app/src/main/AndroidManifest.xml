@@ -27,7 +27,9 @@
         <activity
             android:name=".GameActivity"
             android:screenOrientation="sensorLandscape" />
-        <activity android:name=".MainActivity"></activity>
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="sensorPortrait" />
     </application>
 
 </manifest>
