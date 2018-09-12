@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 
 import com.example.ga.rps.fragment.CameraPreviewFragment;
@@ -30,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_main);
-
         viewPager = findViewById(R.id.viewpager);
         viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
         viewPager.setCurrentItem(2);
@@ -108,4 +108,9 @@ public class MainActivity extends AppCompatActivity {
     public void showCameraPage() {
         viewPager.setCurrentItem(2, true);
     }
+
+    public void showGameMode() {
+        viewPager.setCurrentItem(1, true);
+    }
+
 }

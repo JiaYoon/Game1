@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.ga.rps.GameActivity;
+import com.example.ga.rps.MainActivity;
 import com.example.ga.rps.R;
 import com.example.ga.rps.view.CameraPreview;
 
@@ -148,6 +149,13 @@ public class CameraPreviewFragment extends Fragment {
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
                 startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
+            }
+        });
+
+        view.findViewById(R.id.btnModeSelect).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).showGameMode();
             }
         });
 
